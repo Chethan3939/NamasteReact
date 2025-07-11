@@ -1,3 +1,73 @@
 #heading{
     color: red;
 }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid black;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    background-color: #f0f0f0;
+}
+
+.nav-items > ul {
+    display: flex;
+    list-style-type: none;
+}
+
+.nav-items > ul > li {
+    padding: 10px;
+    font-size: 20px;
+    margin: 10px;
+}
+
+.restaurant-card {
+    background-color: #f0f0f0;
+    margin: 10px;
+    padding: 10px;
+    width: 300px;
+}
+
+.restaurant-card:hover {
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.restaurant-logo {
+    width: 100%;
+}
+
+.restaurant-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.shimmer-card {
+    background-color: #f0f0f0;
+    margin: 10px;
+    padding: 10px;
+    width: 300px;
+    height: 500px;
+    animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+    0% {
+        background-color: #f0f0f0;
+    }
+    50% {
+        background-color: #e0e0e0;
+    }
+    100% {
+        background-color: #f0f0f0;
+    }
+}
+
+.shimmer-container {
+    display: flex;
+    flex-wrap: wrap;
+}
