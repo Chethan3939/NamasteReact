@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Shimmer from "./Shimmer";
-import { RESTAURANT_MENU_API_URL } from "../utils/constants";
+import { IMG_CDN_URL } from "../utils/constants";
 import { useParams } from "react-router-dom";
 import useRestauranMenu from "../utils/useRestauranMenu";
 import { Link } from "react-router-dom";
+import RestaurantCategory from "./RestaurantCategory";
+import UserContext from "../utils/UserContext";
 
 const RestaurantMenu = () => {
 
@@ -13,33 +15,48 @@ const RestaurantMenu = () => {
 
   const menuInfo = useRestauranMenu(id);
 
+  const [showIndex, setShowIndex] = useState(0);
+
+  const {logginUser} = useContext(UserContext);
+
   console.log("menuInfo check", menuInfo)
 
     if (!menuInfo) return <Shimmer />;
 
-const {name, cuisines, areaName , city, costForTwoMessage  } = menuInfo?.cards[2]?.card?.card?.info;
+const {name, cuisines, areaName , city, costForTwoMessage, cloudinaryImageId  } = menuInfo?.cards[2]?.card?.card?.info;
 
 const {itemCards} = menuInfo.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card;
 
-console.log(itemCards);
+
+const  menucards = menuInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(x => x.card?.card?.['@type'] === "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory");
+
+console.log(menucards);
 
 if (!itemCards) return <h1>No Menu Items Found</h1>;
 
   return (
     <div className="restaurantMenu-container">
-      <div> 
-        <Link to="/">{`< Back to Home`}</Link>
+      <div className="p-4 m-4 text-3xl rounded-4xl"> 
+        <Link to="/">{"⬅️"}</Link>
       </div>
-      <div>
-        <h1>Name : {name}</h1>
-        <h1>Cuisines : {cuisines.join(", ")}</h1>
-        <h1>Location: {areaName + ' ' + city}</h1>
-        <h1>Cost for two : {costForTwoMessage}</h1>
-        <h2>Menu</h2>
+      <div className="p-4 m-4 text-center">
+        <img className="w-72 mx-auto my-2 rounded-lg shadow-md" src={IMG_CDN_URL + cloudinaryImageId} alt="restaurant-logo" />
+        <h1 className="text-3xl font-bold my-2" >Name : {name}</h1>
+        <h1 className="text-xl my-2">Cuisines : {cuisines.join(", ")}</h1>
+        <h1 className="text-xl my-2" >Location: {areaName + ' ' + city}</h1>
+        <h1 className="text-xl my-2" >Cost for two : {costForTwoMessage}</h1>
+        <h1 className="text-xl my-2" >UserName : {logginUser} </h1>
+        <h2 className="text-xl font-bold my-2">Menu</h2>
         <ul>
           {
-              itemCards.map((item) => (
-                  <li key={item.card.info.id} >{item.card.info.name} - Rs.{item.card.info.price/ 100 || item.card.info.defaultPrice /100 }</li>
+              menucards.map((category, index) => (
+                //controller component here
+                <RestaurantCategory key={category.card.card.categoryId}
+                 data = {category.card.card}
+                 showItems = { index === showIndex ? true : false}
+                 setShowIndex = {()=> setShowIndex(index)}
+                 
+                 />
               ))
           }
         </ul>

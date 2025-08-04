@@ -23,3 +23,8 @@ Learning React and is Concepts
     - Address   
     - contact
 */
+
+//Redux toolkit
+
+-Install libraries (Reduc)
+-build
